@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "hipsterhash"
-  gem.version       = "0.0.1"
+  gem.version       = "0.0.2"
   gem.authors       = ["Bryan JJ Buckley"]
   gem.email         = ["jjbuckley@gmail.com"]
   gem.description   = %q{A hash which is all, like, whatever.}
