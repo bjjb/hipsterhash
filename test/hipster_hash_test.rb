@@ -48,4 +48,11 @@ class HipsterHashTest < Test::Unit::TestCase
     assert_equal :bar, hh.foo
     assert_equal :bar, hh.FOO
   end
+
+  def test_nested_arrays
+    hh = HipsterHash.new(:foo => { :bar => [ { :baz => 1 } ] })
+    assert_equal 1, hh.foo.bar[0].baz
+    hh = HipsterHash.new("foo" => { "bar" => [ { "baz" => 1 } ] })
+    assert_equal 1, hh.foo.bar[0].baz
+  end
 end
