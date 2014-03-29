@@ -1,2 +1,2 @@
 # -*- encoding : utf-8 -*-
-require 'hipster_hash'
+require_relative './hipster_hash'

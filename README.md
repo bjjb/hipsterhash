@@ -24,9 +24,6 @@ hh[:foo_bar] = "Pigs"
 hh["FooBar"] # => "Pigs"
 ```
 
-It uses [ActiveSupport][1] [Inflectors][2] internally, so you can probably muck
-around with them to modify the behaviour.
-
 ## Contributing
 
 1. Fork it
@@ -34,6 +31,3 @@ around with them to modify the behaviour.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-[1]: https://github.com/rails/rails/tree/master/activesupport/lib/active_support
-[2]: https://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflector/inflections.rb

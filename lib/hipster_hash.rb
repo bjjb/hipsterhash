@@ -1,49 +1,66 @@
 # -*- encoding : utf-8 -*-
-require 'active_support/core_ext/string/inflections'
 
 # A HipsterHash is like a regular Hash, except the keys are semi case
 # insensitive, and symbols and strings are equivalent. Therefore, :foo_bar,
 # :FooBar, and "foo_bar" are considered to be the same key.
 class HipsterHash < Hash
-  def initialize(initial = {}, &block)
-    case initial
-    when Hash 
-      super(&block)
-      initial.each { |k, v| self[k] = v }
-    else
-      super
-    end
-  end
 
-  def [](key)
-    convert_value(super(convert_key(key)))
+  alias store! store
+
+  def store(key, value)
+    memoize(key) do
+      k, v = convert_key(key), convert_value(value)
+      store!(k, v)
+    end
   end
 
   def []=(key, value)
-    super(convert_key(key), value)
-  end
-
-  def method_missing(sym, *args, &block)
-    if args.empty? and !block_given?
-      self[sym] || super
-    else
-      super
+    memoize(key) do
+      k, v = convert_key(key), convert_value(value)
+      store!(k, v)
     end
   end
 
-protected
-  def convert_key(k)
-    self.class.convert_key(k)
+  def fetch(key)
+    super rescue super(convert_key(key)).tap { |v| store!(key, v) }
   end
 
-  def self.convert_key(k)
-    k.to_s.underscore.to_sym
+  def [](key)
+    super || super(convert_key(key)).tap { |v| store!(key, v) }
+  end
+
+  def key?(sym)
+    super || super(convert_key(sym))
+  end
+
+  def self.[](*args)
+    new.tap { |hh| Hash[*args].each { |k, v| hh.store(k, v) } }
+  end
+
+protected
+  
+  def method_missing(sym, *args, &block)
+    return super if block_given?
+    return store(sym[0...-1], args.first) if sym[-1] == '=' and args.length == 1
+    return fetch(sym) if args.empty? and key?(sym)
+    super
+  end
+
+  def converted_keys
+    @converted_keys ||= Hash.new do |h, k|
+      h[k] = underscore(k.to_s).to_sym
+    end
+  end
+
+  def convert_key(k)
+    converted_keys[k]
   end
 
   def self.convert_value(arg)
     case arg
-      when Hash then new(arg)
-      when Array then arg.map { |a| convert_value(a) }
+      when self then arg
+      when Hash then self[arg]
+      when Array then arg.map { |x| convert_value(x) }
       else arg
     end
   end
@@ -51,4 +68,20 @@ protected
   def convert_value(arg)
     self.class.convert_value(arg)
   end
+
+  def underscore(s)
+    s.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').gsub(/([a-z])([A-Z])/, '\1_\2').downcase
+  end
+
+  def memoize(sym, &block)
+    yield.tap do |x|
+      eigenklass.class_eval { define_method(:"#{sym}") { x } } unless @@unmemoizable.key?(convert_key(sym))
+    end
+  end
+
+  def eigenklass
+    @eigenklass ||= (class << self; self; end)
+  end
+
+  @@unmemoizable = Hash[[methods + instance_methods].flatten.uniq.zip([])]
 end
