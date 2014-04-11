@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "hipsterhash"
-  gem.version       = "0.0.3"
+  gem.version       = "0.0.4"
   gem.authors       = ["bjjb"]
   gem.email         = ["jj@bjjb.org"]
   gem.summary       = %q{A Hash which is all, like, whatever.}
@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
 A HipsterHash is just like a regular ruby Hash, except that it doesn't
 distinguish between symbols or strings, and the keys are case insensitive.
   DESC
-  gem.homepage      = "http://bjjb.github.com/hipsterhash"
+  gem.homepage      = "http://bjjb.github.io/hipsterhash"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
