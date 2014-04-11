@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
 A HipsterHash is just like a regular ruby Hash, except that it doesn't
 distinguish between symbols or strings, and the keys are case insensitive.
   DESC
-  gem.homepage      = "http://jjbuckley.github.com/hipsterhash"
+  gem.homepage      = "http://bjjb.github.com/hipsterhash"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

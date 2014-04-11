@@ -24,6 +24,15 @@ hh[:foo_bar] = "Pigs"
 hh["FooBar"] # => "Pigs"
 ```
 
+## Performance
+
+A HipsterHash is pretty quick - faster than an OpenStruct (and more, like,
+sure, man), but not as fast as a Hash. And writing is *slow*. It's nifty for
+scenarios like configuration objects that get created once, and accessed many
+times.
+
+Run the performance.rb script in the test directory for a gander.
+
 ## Contributing
 
 1. Fork it
